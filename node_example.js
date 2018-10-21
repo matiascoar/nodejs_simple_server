@@ -71,17 +71,12 @@ function isNumeric(num) {
 /**
  ** fibonacci returns true if input is a number. This can be done using the oppsite behaviour from isNaN function
  **/
-function fibonacci(num){
-  var a = 1, b = 0, temp;
-
-  while (num >= 0){
-    temp = a;
-    a = a + b;
-    b = temp;
-    num--;
+function fibonacci(n){
+  let arr = [0, 1];
+  for (let i = 2; i < n + 1; i++){
+    arr.push(arr[i - 2] + arr[i -1])
   }
-
-  return b;
+ return arr[n]
 }
 
 server.listen(8080)
