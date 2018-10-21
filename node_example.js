@@ -23,6 +23,41 @@ var server = http.createServer(function (request, response) {
     response.writeHead(200, {'Content-Type': 'application/json'})
     response.end(JSON.stringify({result:suma}))
   }
+
+  if(data[0] === '/multiplicacion') {
+    var mult = 1
+    var input = data[1].split('&')
+    input.forEach(function(numero) {
+      var splitted = numero.split('=')[1]
+      if(isNumeric(splitted)) {
+        //Ok, it's a number
+        var number = Number(splitted)
+        mult = mult*number
+      } else {
+        //It's not a number, so we show an error message and sends to the client
+        response.writeHead(400, {'Content-Type': 'application/json'})
+        response.end(JSON.stringify({result:'error, el input debe ser numerico'}))
+      }
+    })
+    //If everithing was OK, we send code 200 response, using json format
+    response.writeHead(200, {'Content-Type': 'application/json'})
+    response.end(JSON.stringify({result:mult}))
+  }
+
+  if(data[0] === '/fibonacci') {
+    var input = data[1].split('=')[1]
+    if(isNumeric(input)) {
+      //Ok, it's a number
+      fib = fibonacci(input)
+    } else {
+      //It's not a number, so we show an error message and sends to the client
+      response.writeHead(400, {'Content-Type': 'application/json'})
+      response.end(JSON.stringify({result:'error, el input debe ser numerico'}))
+    }
+    //If everithing was OK, we send code 200 response, using json format
+    response.writeHead(200, {'Content-Type': 'application/json'})
+    response.end(JSON.stringify({result:fib}))
+  }
 })
 
 /**
@@ -31,6 +66,22 @@ var server = http.createServer(function (request, response) {
 function isNumeric(num) {
   //isNaN returns false if the input is a number, true otherwise
   return !isNaN(num)
+}
+
+/**
+ ** fibonacci returns true if input is a number. This can be done using the oppsite behaviour from isNaN function
+ **/
+function fibonacci(num){
+  var a = 1, b = 0, temp;
+
+  while (num >= 0){
+    temp = a;
+    a = a + b;
+    b = temp;
+    num--;
+  }
+
+  return b;
 }
 
 server.listen(8080)
